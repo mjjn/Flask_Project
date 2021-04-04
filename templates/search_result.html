@@ -21,8 +21,8 @@
             <li class="nav-item">
               <a class="nav-link" href="/">Search  <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Statistics </a>
+            <li class="nav-item ">
+              <a class="nav-link" href="/stats">Statistics </a>
             </li>
             {% if not logged %}
             <li class="nav-item ml-auto">
@@ -40,7 +40,6 @@
           </ul>
         </div>
       </nav>
-
       <div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="logModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -61,27 +60,47 @@
           </div>
         </div>
       </div>
-
-      <div class="container">
-        <div class="row mt-3">
-          <h3 style="text-align: center;">Choose one criteria to see stats</h3>
-        </div>
-        <div class="row mt-3">
-          <a href="/year" role="button" class="btn btn-primary">YEAR</a>
-        </div>
-        <div class="row mt-3">
-          <a href="/model" role="button" class="btn btn-primary">MODEL</a>
-        </div>
-        <div class="row mt-3">
-          <a href="/country" role="button" class="btn btn-primary">COUNTRY</a>
-        </div>
-        <div class="row mt-3">
-          <a href="/location" role="button" class="btn btn-primary">LOCATION</a>
-        </div>
-        <div class="row mt-3">
-          <a href="/operator" role="button" class="btn btn-primary">Airline Operator</a>
-        </div>
+      <div class="container" style="overflow-x: auto;  width: 1000px;height: 100%;">
+          {% if not showOne and not showTwo %}
+          <div class="bg-danger">
+              Sorry no search results found
+          </div>
+          {% endif %}
+          {% if showOne %}
+          <h3 style="text-align: center;">Accidents</h3>
+          <table class="table">
+              <tr>
+                  {% for a1 in attrs1 %}
+                  <th>{{ a1 }}</th>
+                  {% endfor %}
+              </tr>
+              {% for r in res1 %}
+              <tr>
+                  {% for a1 in attrs1 %}
+                  <td>{{ r[a1] }}</td>
+                  {% endfor %}
+              </tr>
+              {% endfor %}
+          </table>
+          {% endif %}
+          <div class="mt-4"></div>
+          {% if showTwo %}
+          <h3 style="text-align: center;">FAAs Incidents</h3>
+          <table class="table">
+              <tr>
+                  {% for a1 in attrs2 %}
+                  <th>{{ a1 }}</th>
+                  {% endfor %}
+              </tr>
+              {% for r in res2 %}
+              <tr>
+                  {% for a1 in attrs2 %}
+                  <td>{{ r[a1] }}</td>
+                  {% endfor %}
+              </tr>
+              {% endfor %}
+          </table>
+          {% endif %}
       </div>
-      
 </body>
 </html>

@@ -8,6 +8,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title>Airline Accident Enquiry System</title>
+    <style>
+        #my_v_air {
+            display: none;
+        }
+
+        #my_v_acc {
+            display: none;
+        }
+
+        #my_v_del_acc {
+            display: none;
+        }
+    </style>
 </head>
 <body style="background-color: azure;">
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
@@ -21,8 +34,8 @@
             <li class="nav-item">
               <a class="nav-link" href="/">Search  <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Statistics </a>
+            <li class="nav-item">
+              <a class="nav-link" href="/stats">Statistics </a>
             </li>
             {% if not logged %}
             <li class="nav-item ml-auto">
@@ -31,7 +44,7 @@
             {% endif %}
             {% if logged %}
             <li class="nav-item ml-auto active">
-              <a class="nav-link" href="/admin">Update </a>
+              <a class="nav-link" href="#">Update </a>
             </li>
             <li class="nav-item ml-auto">
               <a class="nav-link" href="/logout">Logout </a>
@@ -61,27 +74,69 @@
           </div>
         </div>
       </div>
-
-      <div class="container">
-        <div class="row mt-3">
-          <h3 style="text-align: center;">Choose one criteria to see stats</h3>
+      
+      <div class="row">
+          <div class="col-1"></div>
+          <div class="col-3">
+              <h2>Choose option</h2>
+              <input type="radio" name="up" value="air" class="air">
+              <p>Insert into aircraft1</p>
+              <div class="mt-2"></div>
+              <input type="radio" name="up" value="acc" class="air">
+              <p>Insert into airline_accident</p>
+              <div class="mt-2"></div>
+              <input type="radio" name="up" value="del_acc" class="air">
+              <p>Delete From airline_accident</p>
+          </div>
+          <div class="col-1"></div>
+          <div class="col-5" id="my_v_air" class="air_">
+              <form action="/air_ins" method="POST">
+                  {% for a in attrs_air %}
+                <div class="form-group">
+                    <label for="id">Enter {{ a }}: </label>
+                    <input type="text" class="form-control" name="{{a}}">
+                  </div>
+                  {% endfor %}
+                  <button type="submit" class="btn-primary">Submit</button>
+              </form>
+          </div>
+          <div class="col-5" id="my_v_acc">
+            <form action="/acc_ins" method="POST">
+                {% for a in attrs_acc %}
+              <div class="form-group">
+                  <label for="id">Enter {{ a }}: </label>
+                  {% if 'date' not in a %}
+                  <input type="text" class="form-control" name="{{a}}">
+                  {% endif %}
+                  {% if 'date' in a %}
+                  <input type="date" class="form-control" name="{{a}}">
+                  {% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn-primary">Submit</button>
+            </form>
         </div>
-        <div class="row mt-3">
-          <a href="/year" role="button" class="btn btn-primary">YEAR</a>
-        </div>
-        <div class="row mt-3">
-          <a href="/model" role="button" class="btn btn-primary">MODEL</a>
-        </div>
-        <div class="row mt-3">
-          <a href="/country" role="button" class="btn btn-primary">COUNTRY</a>
-        </div>
-        <div class="row mt-3">
-          <a href="/location" role="button" class="btn btn-primary">LOCATION</a>
-        </div>
-        <div class="row mt-3">
-          <a href="/operator" role="button" class="btn btn-primary">Airline Operator</a>
+        <div class="col-5" id="my_v_del_acc">
+            <form action="/acc_del" method="POST">
+              <div class="form-group">
+                  <label for="id">Enter Event ID(integer) to delete</label>
+                  <input type="number" name="id" id="id">
+                </div>
+                <button type="submit" class="btn-primary">Submit</button>
+            </form>
         </div>
       </div>
-      
+
+      <script>
+          $(document).ready(function() {
+                $('input[type="radio"]').click(function() {
+                    $('#my_v_air').hide();
+                    $('#my_v_acc').hide();
+                    $('#my_v_del_acc').hide();
+                    var n = $(this).attr('value');
+                    $('#my_v_'+n).show();
+                });
+            });
+      </script>
 </body>
 </html>
